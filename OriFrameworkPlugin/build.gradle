@@ -1,0 +1,4 @@
+dependencies {
+    shadow 'org.spigotmc:spigot:1.17'
+    implementation project(':Framework')
+}

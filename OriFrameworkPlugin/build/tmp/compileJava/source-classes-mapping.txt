@@ -1,0 +1,6 @@
+xyz/oribuin/gui/plugin/OriFramework.java
+ xyz.oribuin.gui.plugin.OriFramework
+xyz/oribuin/gui/plugin/menu/BasicMenu.java
+ xyz.oribuin.gui.plugin.menu.BasicMenu
+xyz/oribuin/gui/plugin/command/CmdOpen.java
+ xyz.oribuin.gui.plugin.command.CmdOpen

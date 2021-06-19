@@ -1,0 +1,4 @@
+rootProject.name = 'ori-gui'
+include 'OriFrameworkPlugin'
+include 'Framework'
+

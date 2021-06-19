@@ -1,0 +1,36 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.0.0' apply false
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'com.github.johnrengelman.shadow'
+
+    group 'xyz.oribuin.gui'
+    version '1.0'
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+
+        maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
+        maven { url "https://repo.rosewooddev.io/repository/public/" }
+        maven { url "https://repo.codemc.org/repository/maven-public" }
+        maven { url "https://jitpack.io" }
+    }
+}
+
+dependencies {
+    implementation project(':Framework')
+    implementation project(':OriFrameworkPlugin')
+}
+
+shadowJar {
+    archiveClassifier.set(null)
+
+    relocate('io.github.bananapuncher', "${project.group}.libs.bananapuncher")
+}
+
+tasks.getByName("build").dependsOn("shadowJar")

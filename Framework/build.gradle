@@ -1,0 +1,11 @@
+compileJava {
+    options.compilerArgs += ['-parameters']
+    options.fork = true
+    options.forkOptions.executable = 'javac'
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot:1.17'
+    implementation 'io.github.bananapuncher714:nbteditor:7.17.0'
+}
