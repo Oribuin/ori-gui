@@ -89,10 +89,10 @@ public abstract class BaseGui implements InventoryHolder {
     public void update() {
         this.inv.clear();
         this.addContent();
-        new ArrayList<>(this.inv.getViewers()).forEach(entity -> ((Player) entity).updateInventory());
+        this.updateTitle(title);
     }
 
-    private void addContent() {
+    public void addContent() {
         this.itemMap.forEach((integer, item) -> this.inv.setItem(integer, item.getItem()));
     }
 
