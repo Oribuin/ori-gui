@@ -2,7 +2,6 @@ package xyz.oribuin.gui;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -32,13 +31,17 @@ public abstract class BaseGui implements InventoryHolder {
     private Consumer<InventoryCloseEvent> closeAction;
     private Consumer<InventoryOpenEvent> openAction;
 
+    static {
+        // Register plugin events.
+        Bukkit.getPluginManager().registerEvents(new GuiListener(), plugin);
+    }
+
     public BaseGui(final int slots, String title) {
         this.slots = slots;
         this.title = title;
 
-        // Register plugin events.
-        Bukkit.getPluginManager().registerEvents(new GuiListener(), plugin);
         this.inv = Bukkit.createInventory(this, slots, title);
+
     }
 
     /**
