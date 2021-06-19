@@ -5,8 +5,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Map;
 import java.util.function.Consumer;
 
 // TODO
@@ -14,6 +15,7 @@ public class PaginatedGui extends BaseGui {
 
     private final List<Item> pageItems;
     private final List<Integer> pageSlots;
+    private final Map<Integer, Item> currentPage = new LinkedHashMap<>();
     private int page = 1;
 
     public PaginatedGui(int slots, String title, List<Integer> pageSlots) {
@@ -24,20 +26,44 @@ public class PaginatedGui extends BaseGui {
 
     @Override
     public void addContent() {
+        this.getInv().clear();
         super.addContent();
 
-        int elementsPerPage = this.pageSlots.size();
-        final AtomicInteger index = new AtomicInteger(0);
-        pageItems.stream()
-                .skip((long) (page - 1) * elementsPerPage)
-                .limit(elementsPerPage)
-                .forEachOrdered(item -> {
-                    int i = index.getAndIncrement();
-                    this.getItemMap().put(pageSlots.get(i), item);
-                    this.getInv().setItem(pageSlots.get(i), item.getItem());
-                });
+        for (Item item : getPageNum(this.page)) {
+            for (int slot = 0; slot < this.getInv().getSize(); slot++) {
+                if (this.getInv().getItem(slot) != null)
+                    continue;
 
+                currentPage.put(slot, item);
+                getInv().setItem(slot, item.getItem());
+                break;
 
+            }
+        }
+
+    }
+
+    /**
+     * Gets the items in the page
+     *
+     * @param givenPage The page to get
+     * @return A list with all the page items
+     * @link https://github.com/TriumphTeam/triumph-gui/blob/master/core/src/main/java/dev/triumphteam/gui/guis/PaginatedGui.java#L396
+     */
+    private List<Item> getPageNum(final int givenPage) {
+        final int page = givenPage - 1;
+
+        final List<Item> guiPage = new ArrayList<>();
+
+        int max = ((page * pageSlots.size()) + pageSlots.size());
+        if (max > pageItems.size())
+            max = pageItems.size();
+
+        for (int i = page * pageSlots.size(); i < max; i++) {
+            guiPage.add(pageItems.get(i));
+        }
+
+        return guiPage;
     }
 
     /**
@@ -51,27 +77,50 @@ public class PaginatedGui extends BaseGui {
     }
 
     public void previous(HumanEntity player) {
-        if (page > 1) {
-            this.open(player, page - 1);
-        } else {
-            this.open(player, (int) Math.ceil((double) pageItems.size() / pageSlots.size()));
-        }
+        this.open(player, this.getPrevPage());
     }
 
     public void next(HumanEntity player) {
-        if (pageSlots.size() * page < pageItems.size()) {
-            this.open(player, page + 1);
-        } else {
-            this.open(player, 1);
-        }
+        this.open(player, this.getNextPage());
     }
 
     public void open(HumanEntity entity, int page) {
         this.setPage(page);
+        this.currentPage.forEach((key, value) -> this.getInv().setItem(key, null));
+
+        this.currentPage.clear();
         this.open(entity);
+    }
+
+    public int getNextPage() {
+        return pageSlots.size() * page < pageItems.size() ? page + 1 : 1;
+    }
+
+    public int getPrevPage() {
+        return page > 1 ? page - 1 : this.getTotalPages();
+    }
+
+    public int getTotalPages() {
+        return (int) Math.ceil((double) pageItems.size() / pageSlots.size());
+    }
+
+    public int getPage() {
+        return page;
     }
 
     public void setPage(int page) {
         this.page = page;
+    }
+
+    public List<Item> getPageItems() {
+        return pageItems;
+    }
+
+    public List<Integer> getPageSlots() {
+        return pageSlots;
+    }
+
+    public Map<Integer, Item> getCurrentPage() {
+        return currentPage;
     }
 }

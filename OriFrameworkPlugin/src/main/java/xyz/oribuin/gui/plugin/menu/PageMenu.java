@@ -11,6 +11,7 @@ import xyz.oribuin.gui.plugin.OriFramework;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class PageMenu {
@@ -33,7 +34,14 @@ public class PageMenu {
             ((Player) event.getWhoClicked()).updateInventory();
         });
 
+        final List<Integer> heads = new ArrayList<>();
+        for (int i = 0; i < 500; i++) {
+            heads.add(i);
+        }
+
+
         Arrays.stream(Material.values()).filter(Material::isItem)
+                .sorted(Comparator.comparing(Enum::name))
                 .forEach(material -> gui.addPageItem(new Item.Builder(material).create(),
                         event -> event.getWhoClicked().getInventory().addItem(new ItemStack(material))));
 
