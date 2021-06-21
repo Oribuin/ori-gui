@@ -92,7 +92,6 @@ public abstract class BaseGui implements InventoryHolder {
     public void update() {
         this.inv.clear();
         this.addContent();
-        this.updateTitle(title);
     }
 
     public void addContent() {

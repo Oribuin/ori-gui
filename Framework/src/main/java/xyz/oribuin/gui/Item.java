@@ -196,7 +196,7 @@ public class Item {
          * @return Item.Builder
          */
         public Builder setNBT(String key, Object value) {
-            this.item = NBTEditor.set(item, key, value);
+            this.item = NBTEditor.set(item, value, key);
             return this;
         }
 

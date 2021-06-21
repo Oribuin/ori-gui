@@ -77,15 +77,25 @@ public class PaginatedGui extends BaseGui {
     }
 
     public void previous(HumanEntity player) {
+        if (this.getPrevPage() == page) {
+            this.open(player, this.getTotalPages());
+            return;
+        }
+
         this.open(player, this.getPrevPage());
     }
 
     public void next(HumanEntity player) {
+        if (this.getNextPage() == page) {
+            this.open(player, 1);
+            return;
+        }
+
         this.open(player, this.getNextPage());
     }
 
     public void open(HumanEntity entity, int page) {
-        this.setPage(page);
+        this.page = page;
         this.currentPage.forEach((key, value) -> this.getInv().setItem(key, null));
 
         this.currentPage.clear();
@@ -93,31 +103,23 @@ public class PaginatedGui extends BaseGui {
     }
 
     public int getNextPage() {
-        return pageSlots.size() * page < pageItems.size() ? page + 1 : 1;
+        if (page + 1 > getTotalPages())
+            return page;
+        return page + 1;
     }
 
     public int getPrevPage() {
-        return page > 1 ? page - 1 : this.getTotalPages();
+        if (page - 1 == 0)
+            return page;
+        return page - 1;
     }
 
     public int getTotalPages() {
-        return (int) Math.ceil((double) pageItems.size() / pageSlots.size());
+        return (int) Math.ceil((double) pageItems.size() / this.pageSlots.size());
     }
 
     public int getPage() {
         return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public List<Item> getPageItems() {
-        return pageItems;
-    }
-
-    public List<Integer> getPageSlots() {
-        return pageSlots;
     }
 
     public Map<Integer, Item> getCurrentPage() {
