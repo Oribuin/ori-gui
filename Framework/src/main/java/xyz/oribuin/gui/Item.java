@@ -62,7 +62,8 @@ public class Item {
          */
         public Builder setName(String text) {
             final ItemMeta meta = this.item.getItemMeta();
-            if (meta == null) return this;
+            if (meta == null)
+                return this;
 
             meta.setDisplayName(text);
             item.setItemMeta(meta);
@@ -78,7 +79,8 @@ public class Item {
          */
         public Builder setLore(List<String> lore) {
             final ItemMeta meta = this.item.getItemMeta();
-            if (meta == null) return this;
+            if (meta == null)
+                return this;
 
             meta.setLore(lore);
             item.setItemMeta(meta);
@@ -94,7 +96,8 @@ public class Item {
          */
         public Builder setLore(String... lore) {
             final ItemMeta meta = this.item.getItemMeta();
-            if (meta == null) return this;
+            if (meta == null)
+                return this;
 
             meta.setLore(Arrays.asList(lore));
             item.setItemMeta(meta);
@@ -122,7 +125,8 @@ public class Item {
          */
         public Builder addEnchant(Enchantment ench, int level) {
             final ItemMeta meta = this.item.getItemMeta();
-            if (meta == null) return this;
+            if (meta == null)
+                return this;
 
             meta.addEnchant(ench, level, true);
             item.setItemMeta(meta);
@@ -149,7 +153,8 @@ public class Item {
          */
         public Builder setFlags(ItemFlag... flags) {
             final ItemMeta meta = this.item.getItemMeta();
-            if (meta == null) return this;
+            if (meta == null)
+                return this;
 
             meta.removeItemFlags(ItemFlag.values());
             meta.addItemFlags(flags);
@@ -166,7 +171,8 @@ public class Item {
          */
         public Builder setUnbreakable(boolean unbreakable) {
             final ItemMeta meta = this.item.getItemMeta();
-            if (meta == null) return this;
+            if (meta == null)
+                return this;
 
             meta.setUnbreakable(unbreakable);
             return this;
@@ -177,9 +183,14 @@ public class Item {
          *
          * @return Item.Builder
          */
-        public Builder glow() {
+        public Builder glow(boolean b) {
+            if (!b) {
+                return this;
+            }
+
             final ItemMeta meta = this.item.getItemMeta();
-            if (meta == null) return this;
+            if (meta == null)
+                return this;
 
             meta.addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 1, true);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -201,9 +212,11 @@ public class Item {
         }
 
         public Builder setTexture(String texture) {
-            if (item.getType() != Material.PLAYER_HEAD) return this;
+            if (item.getType() != Material.PLAYER_HEAD)
+                return this;
             final SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
-            if (skullMeta == null) return this;
+            if (skullMeta == null)
+                return this;
 
             final Field field;
             try {

@@ -34,6 +34,9 @@ public class PaginatedGui extends BaseGui {
                 if (this.getInv().getItem(slot) != null)
                     continue;
 
+                if (pageItems.contains(item) && !pageSlots.contains(slot))
+                    continue;
+
                 currentPage.put(slot, item);
                 getInv().setItem(slot, item.getItem());
                 break;

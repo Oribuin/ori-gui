@@ -13,11 +13,13 @@ public class GuiListener implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent event) {
-        if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
+        if (!(event.getInventory().getHolder() instanceof BaseGui))
+            return;
 
         final BaseGui gui = (BaseGui) event.getInventory().getHolder();
 
-        if (event.getClickedInventory() == null) return;
+        if (event.getClickedInventory() == null)
+            return;
 
         if (gui.getDefaultClickFunction() != null) {
             gui.getDefaultClickFunction().accept(event);
@@ -28,18 +30,21 @@ public class GuiListener implements Listener {
         if (gui instanceof PaginatedGui) {
             final PaginatedGui paginatedGui = (PaginatedGui) gui;
             item = paginatedGui.getItemMap().get(event.getSlot());
-            if (item == null) item = paginatedGui.getCurrentPage().get(event.getSlot());
+            if (item == null)
+                item = paginatedGui.getCurrentPage().get(event.getSlot());
         } else {
             item = gui.getItemMap().get(event.getSlot());
         }
 
-        if (item != null) item.getEventConsumer().accept(event);
+        if (item != null)
+            item.getEventConsumer().accept(event);
 
     }
 
     @EventHandler
     public void onClose(InventoryCloseEvent event) {
-        if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
+        if (!(event.getInventory().getHolder() instanceof BaseGui))
+            return;
 
         final BaseGui gui = (BaseGui) event.getInventory().getHolder();
 
@@ -50,7 +55,8 @@ public class GuiListener implements Listener {
 
     @EventHandler
     public void onOpen(InventoryOpenEvent event) {
-        if (!(event.getInventory().getHolder() instanceof BaseGui)) return;
+        if (!(event.getInventory().getHolder() instanceof BaseGui))
+            return;
 
         final BaseGui gui = (BaseGui) event.getInventory().getHolder();
 
