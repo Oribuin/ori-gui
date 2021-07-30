@@ -31,6 +31,7 @@ public class PaginatedGui extends BaseGui {
 
         for (Item item : getPageNum(this.page)) {
             for (int slot = 0; slot < this.getInv().getSize(); slot++) {
+
                 if (this.getInv().getItem(slot) != null)
                     continue;
 
@@ -51,10 +52,12 @@ public class PaginatedGui extends BaseGui {
      *
      * @param givenPage The page to get
      * @return A list with all the page items
-     * @link https://github.com/TriumphTeam/triumph-gui/blob/master/core/src/main/java/dev/triumphteam/gui/guis/PaginatedGui.java#L396
      */
     private List<Item> getPageNum(final int givenPage) {
         final int page = givenPage - 1;
+
+        if (pageItems.size() == 0)
+            return new ArrayList<>();
 
         final List<Item> guiPage = new ArrayList<>();
 
@@ -81,7 +84,7 @@ public class PaginatedGui extends BaseGui {
 
     public void previous(HumanEntity player) {
         if (this.getPrevPage() == page) {
-            this.open(player, this.getTotalPages());
+            this.open(player, this.getTotalPages() != 0 ? this.getTotalPages() : 1);
             return;
         }
 
@@ -108,12 +111,14 @@ public class PaginatedGui extends BaseGui {
     public int getNextPage() {
         if (page + 1 > getTotalPages())
             return page;
+
         return page + 1;
     }
 
     public int getPrevPage() {
         if (page - 1 == 0)
             return page;
+
         return page - 1;
     }
 

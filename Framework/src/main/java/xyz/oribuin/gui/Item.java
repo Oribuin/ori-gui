@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
@@ -230,6 +231,19 @@ public class Item {
                 e.printStackTrace();
             }
 
+            item.setItemMeta(skullMeta);
+            return this;
+        }
+
+        public Builder setOwner(OfflinePlayer owner) {
+            if (item.getType() != Material.PLAYER_HEAD)
+                return this;
+
+            final SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
+            if (skullMeta == null)
+                return this;
+
+            skullMeta.setOwningPlayer(owner);
             item.setItemMeta(skullMeta);
             return this;
         }

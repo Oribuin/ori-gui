@@ -33,7 +33,7 @@ public class GuiListener implements Listener {
             if (item == null)
                 item = paginatedGui.getCurrentPage().get(event.getSlot());
         } else {
-            item = gui.getItemMap().get(event.getSlot());
+            item = gui.getItemMap().getOrDefault(event.getSlot(), null);
         }
 
         if (item != null)
