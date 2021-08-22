@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-// TODO
 public class PaginatedGui extends BaseGui {
 
     private final List<Item> pageItems;
@@ -133,4 +132,9 @@ public class PaginatedGui extends BaseGui {
     public Map<Integer, Item> getCurrentPage() {
         return currentPage;
     }
+
+    public List<Item> getPageItems() {
+        return pageItems;
+    }
+
 }

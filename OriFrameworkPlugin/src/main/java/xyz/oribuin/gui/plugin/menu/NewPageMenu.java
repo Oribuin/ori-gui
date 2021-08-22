@@ -14,11 +14,11 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-public class PageMenu {
+public class NewPageMenu {
 
     private final OriFramework plugin;
 
-    public PageMenu(final OriFramework plugin) {
+    public NewPageMenu(final OriFramework plugin) {
         this.plugin = plugin;
     }
 
@@ -36,7 +36,8 @@ public class PageMenu {
 
         Arrays.stream(Material.values()).filter(Material::isItem)
                 .sorted(Comparator.comparing(Enum::name))
-                .forEach(material -> gui.addPageItem(new Item.Builder(material).create(), event -> event.getWhoClicked().getInventory().addItem(new ItemStack(material))));
+                .limit(45)
+                .forEach(material -> gui.addItem(new Item.Builder(material).create(), event -> event.getWhoClicked().getInventory().addItem(new ItemStack(material))));
 
 
         for (int i = 45; i < 54; i++)

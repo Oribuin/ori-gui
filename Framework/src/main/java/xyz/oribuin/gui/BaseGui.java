@@ -1,6 +1,7 @@
 package xyz.oribuin.gui;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -27,6 +28,7 @@ public abstract class BaseGui implements InventoryHolder {
     private String title;
     private int slots;
 
+    private Consumer<InventoryClickEvent> personalClickAction;
     private Consumer<InventoryClickEvent> defaultClickFunction;
     private Consumer<InventoryCloseEvent> closeAction;
     private Consumer<InventoryOpenEvent> openAction;
@@ -41,7 +43,6 @@ public abstract class BaseGui implements InventoryHolder {
         this.title = title;
 
         this.inv = Bukkit.createInventory(this, slots, title);
-
     }
 
     /**
@@ -56,6 +57,16 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Set an item into the GUI.
+     *
+     * @param slot The item's slot
+     * @param item The gui item.
+     */
+    public void setItem(int slot, Item item) {
+        this.itemMap.put(slot, item);
+    }
+
+    /**
      * Set an item to a list of slots in the GUI.
      *
      * @param slots         The list of slots
@@ -67,6 +78,16 @@ public abstract class BaseGui implements InventoryHolder {
     }
 
     /**
+     * Set an item to a list of slots in the GUI.
+     *
+     * @param slots The list of slots
+     * @param item  The gui Item
+     */
+    public void setItems(List<Integer> slots, Item item) {
+        slots.forEach(i -> setItem(i, item));
+    }
+
+    /**
      * Add an item in the next available slot in the gui.
      *
      * @param item          The ItemStack
@@ -74,14 +95,16 @@ public abstract class BaseGui implements InventoryHolder {
      */
     public void addItem(ItemStack item, Consumer<InventoryClickEvent> eventConsumer) {
         for (int slot = 0; slot < this.inv.getSize(); slot++) {
-            if (this.itemMap.get(slot) == null) continue;
-
-            this.itemMap.put(slot, new Item(item, eventConsumer));
+            if (this.itemMap.get(slot) == null || this.itemMap.get(slot).getItem().getType() == Material.AIR) {
+                this.itemMap.put(slot, new Item(item, eventConsumer));
+                break;
+            }
         }
     }
 
     public void open(HumanEntity entity) {
-        if (entity.isSleeping()) return;
+        if (entity.isSleeping())
+            return;
 
         this.inv.clear();
         this.addContent();
@@ -93,6 +116,7 @@ public abstract class BaseGui implements InventoryHolder {
         this.inv.clear();
         this.addContent();
     }
+
 
     public void addContent() {
         this.itemMap.forEach((integer, item) -> this.inv.setItem(integer, item.getItem()));
@@ -169,5 +193,13 @@ public abstract class BaseGui implements InventoryHolder {
     @Override
     public Inventory getInventory() {
         return this.inv;
+    }
+
+    public Consumer<InventoryClickEvent> getPersonalClickAction() {
+        return personalClickAction;
+    }
+
+    public void setPersonalClickAction(Consumer<InventoryClickEvent> personalClickAction) {
+        this.personalClickAction = personalClickAction;
     }
 }

@@ -7,7 +7,7 @@ allprojects {
     apply plugin: 'com.github.johnrengelman.shadow'
 
     group 'xyz.oribuin.gui'
-    version '1.0'
+    version '1.0.2'
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -28,8 +28,6 @@ dependencies {
 
 shadowJar {
     archiveClassifier.set(null)
-
-    relocate('io.github.bananapuncher', "${project.group}.libs.bananapuncher")
 }
 
 tasks.getByName("build").dependsOn("shadowJar")

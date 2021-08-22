@@ -1,8 +1,8 @@
 name: OriFramework
 main: xyz.oribuin.gui.plugin.OriFramework
-version: '1.0'
+version: '1.0.2'
 authors: [ Oribuin ]
-api-version: '1.13'
+api-version: '1.15'
 description: Example plugin to showcase ori's gui framework
 commands:
   guiframework:

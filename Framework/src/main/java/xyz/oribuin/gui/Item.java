@@ -2,8 +2,8 @@ package xyz.oribuin.gui;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import io.github.bananapuncher714.nbteditor.NBTEditor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -11,6 +11,9 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -43,9 +46,13 @@ public class Item {
         this.item = item;
     }
 
+    public static Item filler(Material material) {
+        return new Item(new Builder(material).setName(" ").create(), event -> {});
+    }
+
     public static class Builder {
 
-        private ItemStack item;
+        private final ItemStack item;
 
         public Builder(Material material) {
             this.item = new ItemStack(material);
@@ -185,9 +192,8 @@ public class Item {
          * @return Item.Builder
          */
         public Builder glow(boolean b) {
-            if (!b) {
+            if (!b)
                 return this;
-            }
 
             final ItemMeta meta = this.item.getItemMeta();
             if (meta == null)
@@ -207,8 +213,50 @@ public class Item {
          * @param value The value of the nbt
          * @return Item.Builder
          */
-        public Builder setNBT(String key, Object value) {
-            this.item = NBTEditor.set(item, value, key);
+        public Builder setNBT(Plugin plugin, String key, String value) {
+            final ItemMeta meta = item.getItemMeta();
+            if (meta == null)
+                return this;
+
+            final PersistentDataContainer container = meta.getPersistentDataContainer();
+            container.set(new NamespacedKey(plugin, key), PersistentDataType.STRING, value);
+            item.setItemMeta(meta);
+            return this;
+        }
+
+        /**
+         * Set an item's NBT Values
+         *
+         * @param key   The key to the nbt
+         * @param value The value of the nbt
+         * @return Item.Builder
+         */
+        public Builder setNBT(Plugin plugin, String key, int value) {
+            final ItemMeta meta = item.getItemMeta();
+            if (meta == null)
+                return this;
+
+            final PersistentDataContainer container = meta.getPersistentDataContainer();
+            container.set(new NamespacedKey(plugin, key), PersistentDataType.INTEGER, value);
+            item.setItemMeta(meta);
+            return this;
+        }
+
+        /**
+         * Set an item's NBT Values
+         *
+         * @param key   The key to the nbt
+         * @param value The value of the nbt
+         * @return Item.Builder
+         */
+        public Builder setNBT(Plugin plugin, String key, double value) {
+            final ItemMeta meta = item.getItemMeta();
+            if (meta == null)
+                return this;
+
+            final PersistentDataContainer container = meta.getPersistentDataContainer();
+            container.set(new NamespacedKey(plugin, key), PersistentDataType.DOUBLE, value);
+            item.setItemMeta(meta);
             return this;
         }
 

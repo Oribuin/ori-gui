@@ -35,7 +35,8 @@ public class BasicMenu {
                 .create();
 
         final List<Integer> inventorySlots = new ArrayList<>();
-        for (int i = 0; i < gui.getInv().getSize(); i++) inventorySlots.add(i);
+        for (int i = 0; i < gui.getInv().getSize(); i++)
+            inventorySlots.add(i);
 
         inventorySlots.forEach(integer -> gui.setItem(integer, item, event -> player.sendMessage(ChatColor.GREEN + "You clicked slot " + event.getSlot())));
         gui.setItem(0, new Item.Builder(Material.PLAYER_HEAD)
@@ -46,6 +47,8 @@ public class BasicMenu {
 
         gui.setItem(2, new Item.Builder(Material.SUNFLOWER).setName(ChatColor.AQUA + "Reset GUI").create(), event -> new BasicMenu(plugin).open(player));
         gui.setItem(3, new Item.Builder(Material.ARROW).setName(ChatColor.AQUA + "Open Paged GUI").create(), event -> new PageMenu(plugin).open(player));
+        gui.setItem(4, new Item.Builder(Material.PLAYER_HEAD).setOwner(player).setName(ChatColor.AQUA + "Self Inventory").create(), event -> new SelfMenu(plugin).open(player));
+        gui.setItem(5, new Item.Builder(Material.TIPPED_ARROW).setName(ChatColor.AQUA + "Material Menu").create(), event -> new NewPageMenu(plugin).open(player));
 
         gui.open(player);
     }
